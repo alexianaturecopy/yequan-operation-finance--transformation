@@ -1,7 +1,8 @@
 # yequan-operation-finance--transformation
-Finance & Operation Executive | Bridge traditional finance work with emerging technology
+Finance & Operation Executive | Driving automation & transformation
 
 🎯 Focus Areas
+-Operational excellence driving & Dashboard tracking
 -AI/ML: Resource planning, Organization automation and transformation
 -Traditional Finance: SOX compliance, multi-entity consolidation,global business development and tax strategy
 -Web3 Finance: Crypto treasury management, blockchain reconciliation, tokenomics
