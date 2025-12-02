@@ -359,7 +359,7 @@ Hummmingbot License
 
 **LinkedIn:** https://www.linkedin.com/in/ye-quan-8b610820a/
 **Email:** alexianaturecopy@gmail.com
-**GitHub:** 
+**GitHub:** https://github.com/alexianaturecopy
 
 **Feedback Welcome:**  
 If you're a CFO, COO, or executive recruiter, I'd love to hear:
