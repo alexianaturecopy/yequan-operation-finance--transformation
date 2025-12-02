@@ -230,39 +230,26 @@ The `sql/` directory contains **production-ready queries** demonstrating:
 9. **Executive Alert Generation** - Automated issue identification
 
 **Business Context:**  
-These aren't academic exercises—they're the exact queries I'd run in a production data warehouse to answer executive questions.
+These aren't academic exercises—they're the exact queries assuming I'd run in a production data warehouse to answer executive questions.
 
 ---
 
 ## Finance Context: Why This Matters
 
-### For CFO/COO Interviews
-
-**Question:** "How have you driven operational excellence at scale?"
-
-**Answer:** *"I built an executive operations dashboard that provides real-time visibility across 12 business units. Rather than waiting 2 weeks for month-end reporting, our executive team has daily access to performance data. This enabled us to identify a $2.3M resource allocation opportunity and catch a contractor overspend issue before it became a $180K annual variance. The system replaced 50 manual reports and cut our reporting time by 60%."*
+It's an executive operations dashboard I built that provides real-time visibility across 12 business units. Rather than waiting 2 weeks for month-end reporting, our executive team has daily access to performance data. This enabled us to identify a $2.3M resource allocation opportunity and catch a contractor overspend issue before it became a $180K annual variance. The system replaced 50 manual reports and cut our reporting time by 60%."*
 
 ### What This Proves
 
-✅ **Strategic Operator** - I build systems for decision-making, not just reports  
-✅ **Transformation Leader** - I drive change from manual to automated operations  
-✅ **Multi-Unit Manager** - I've scaled processes across complex organizations  
-✅ **Technical Bridge** - I can translate business needs into technical solutions  
-✅ **Results-Driven** - I quantify business impact, not just technical features
+✅ **Strategic Operator** - build systems for decision-making, not just reports  
+✅ **Transformation Leader** - drive change from manual to automated operations  
+✅ **Multi-Unit Manager** - scale processes across complex organizations  
+✅ **Technical Bridge** - translate business needs into technical solutions  
+✅ **Results-Driven** - quantify business impact, not just technical features
 
-### Differentiation from Traditional CFO Candidates
-
-**Traditional CFO:** "I have P&L responsibility and manage a team of 15"  
-**Me:** "I built the dashboard that provides P&L visibility and automated the processes that freed my team to focus on strategic analysis instead of manual reporting"
-
-**Traditional CFO:** "I led the month-end close process"  
-**Me:** "I reduced close time 40% by automating our consolidation and variance analysis workflows"
-
----
 
 ## Real-World Deployment Considerations
 
-### Production Implementation Path
+### Production Implementation Roadmap
 
 **Phase 1: Data Integration** (Weeks 1-2)
 - Connect to ERP system (NetSuite, SAP, etc.)
@@ -281,26 +268,26 @@ These aren't academic exercises—they're the exact queries I'd run in a product
 
 ### Integration Points
 
-- **ERP Systems:** NetSuite, SAP, QuickBooks
+- **ERP Systems:** Oracle, NetSuite, SAP, QuickBooks
 - **CRM:** Salesforce (for revenue pipeline data)
 - **HRIS:** Workday, BambooHR (for headcount data)
 - **Communication:** Slack (for automated alerts)
 - **BI Tools:** Can export to Power BI, Tableau for Board packages
 
----
+
 
 ## Future Enhancements
 
 ### Next Phase Features
 - [ ] Predictive analytics using ML for revenue forecasting
-- [ ] Automated Board package generation (PowerPoint export)
-- [ ] Mobile app for executive access
-- [ ] Integration with Slack for automated alerts
 - [ ] Cash flow forecasting with scenario planning
+- [ ] Automated Board package generation (PowerPoint export)
+- [ ] Integration with Slack for automated alerts
+- [ ] Mobile app for executive access
 - [ ] Competitive benchmarking module
 
 ### Why These Matter
-Each enhancement proves additional competencies relevant to senior finance roles: ML/AI fluency, Board communication skills, mobile-first thinking, collaboration tools integration.
+Deep deployment of  ML/AI fluency, Board communication skills, mobile-first thinking, collaboration tools integration.
 
 ---
 
@@ -331,7 +318,7 @@ executive-ops-dashboard/
 
 ### Purpose
 
-This repository demonstrates **operational leadership capabilities through technology**, not just coding ability. Every feature represents a real business challenge I've solved as a finance executive.
+This repository demonstrates **operational leadership capabilities through technology**, not just coding ability. Every feature represents a real business challenge I've solved as a finance and operation executive.
 
 ### Context
 
@@ -344,7 +331,7 @@ Built as part of GitHub portfolio for CFO/COO roles at Web3, AI, and cybersecuri
 
 ### Author
 
-**Alexia**  
+**Ye(Alexia) Quan**  
 CFO | CPA | Venture Partner at Solaris Venture Partners
 
 Transitioning from traditional finance into Web3/AI/cybersecurity sectors. Focus on building operational systems that scale, leading transformation initiatives, and bridging traditional finance with emerging technology.
@@ -362,17 +349,17 @@ Check out my other portfolio projects demonstrating finance leadership:
 
 ---
 
-## License
+## Coding License
 
-MIT License - Free to use for learning and portfolio purposes
+Hummmingbot License 
 
 ---
 
 ## Contact & Feedback
 
-**LinkedIn:** [Your LinkedIn]  
-**Email:** [Your Email]  
-**GitHub:** [Your GitHub Profile]
+**LinkedIn:** https://www.linkedin.com/in/ye-quan-8b610820a/
+**Email:** alexianaturecopy@gmail.com
+**GitHub:** 
 
 **Feedback Welcome:**  
 If you're a CFO, COO, or executive recruiter, I'd love to hear:
@@ -382,11 +369,6 @@ If you're a CFO, COO, or executive recruiter, I'd love to hear:
 
 ---
 
-## Key Insight
 
-> **"GitHub isn't about being a master developer—it's about proving you can bridge finance and technology. This dashboard demonstrates I can design the systems executives need, lead the transformation to implement them, and scale operations across complex organizations."**
-
----
-
-*Last Updated: November 2024*  
+*Last Updated: November 2025*  
 *Status: Production-Ready Portfolio Project*
