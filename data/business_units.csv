@@ -1,0 +1,13 @@
+unit_id,name,vertical,region,performance
+1,SaaS Platform,Software,North America,high
+2,Enterprise Sales,Sales,North America,medium
+3,Cloud Infrastructure,Infrastructure,Global,high
+4,Mobile Products,Software,North America,struggling
+5,Professional Services,Services,North America,medium
+6,Data Analytics,Software,Global,growing
+7,API Platform,Infrastructure,Global,high
+8,EMEA Sales,Sales,EMEA,medium
+9,Customer Success,Services,Global,medium
+10,IoT Division,Hardware,APAC,struggling
+11,Security Products,Software,North America,medium
+12,APAC Sales,Sales,APAC,growing

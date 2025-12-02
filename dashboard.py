@@ -1,0 +1,528 @@
+"""
+Executive Operations Dashboard
+Multi-Unit Performance Tracking and Resource Management
+
+Business Context:
+C-suite decision support tool providing real-time visibility across 12 business units.
+Replaces 50+ static Excel reports with dynamic, actionable insights.
+
+Author: Alexia (CFO Portfolio Project)
+"""
+
+import streamlit as st
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+import numpy as np
+from datetime import datetime
+
+# Page configuration
+st.set_page_config(
+    page_title="Executive Operations Dashboard",
+    page_icon="📊",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+# Custom CSS for executive styling
+st.markdown("""
+    <style>
+    .big-metric {
+        font-size: 36px;
+        font-weight: bold;
+        color: #1f77b4;
+    }
+    .metric-label {
+        font-size: 14px;
+        color: #666;
+    }
+    .alert-high {
+        background-color: #ffebee;
+        padding: 10px;
+        border-left: 4px solid #f44336;
+        margin: 5px 0;
+    }
+    .alert-medium {
+        background-color: #fff3e0;
+        padding: 10px;
+        border-left: 4px solid #ff9800;
+        margin: 5px 0;
+    }
+    .alert-low {
+        background-color: #e8f5e9;
+        padding: 10px;
+        border-left: 4px solid #4caf50;
+        margin: 5px 0;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+@st.cache_data
+def load_data():
+    """Load all dashboard data"""
+    pnl = pd.read_csv('data/monthly_pnl.csv')
+    pnl['date'] = pd.to_datetime(pnl['date'])
+    
+    metrics = pd.read_csv('data/operational_metrics.csv')
+    metrics['date'] = pd.to_datetime(metrics['date'])
+    
+    resources = pd.read_csv('data/resource_allocation.csv')
+    alerts = pd.read_csv('data/executive_alerts.csv')
+    alerts['date_raised'] = pd.to_datetime(alerts['date_raised'])
+    
+    units = pd.read_csv('data/business_units.csv')
+    
+    return pnl, metrics, resources, alerts, units
+
+def format_currency(value):
+    """Format number as currency"""
+    if abs(value) >= 1_000_000:
+        return f"${value/1_000_000:.1f}M"
+    elif abs(value) >= 1_000:
+        return f"${value/1_000:.0f}K"
+    else:
+        return f"${value:.0f}"
+
+def format_percentage(value):
+    """Format number as percentage"""
+    return f"{value:.1f}%"
+
+def create_kpi_card(label, value, delta=None, format_type='currency'):
+    """Create a KPI card with delta"""
+    if format_type == 'currency':
+        formatted_value = format_currency(value)
+    elif format_type == 'percentage':
+        formatted_value = format_percentage(value)
+    else:
+        formatted_value = f"{value:,.0f}"
+    
+    col1, col2 = st.columns([3, 1])
+    with col1:
+        st.markdown(f"<div class='metric-label'>{label}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='big-metric'>{formatted_value}</div>", unsafe_allow_html=True)
+    
+    if delta is not None:
+        with col2:
+            delta_color = "green" if delta > 0 else "red"
+            delta_symbol = "▲" if delta > 0 else "▼"
+            st.markdown(f"<div style='color: {delta_color}; font-size: 18px; font-weight: bold;'>{delta_symbol} {abs(delta):.1f}%</div>", unsafe_allow_html=True)
+
+def executive_overview():
+    """Executive Overview Page"""
+    st.title("📊 Executive Overview")
+    st.markdown("### Real-Time Performance Across 12 Business Units")
+    
+    # Load data
+    pnl, metrics, resources, alerts, units = load_data()
+    
+    # Calculate corporate totals
+    latest_month = pnl['month'].max()
+    current_data = pnl[pnl['month'] == latest_month]
+    prior_month_data = pnl[pnl['month'] == latest_month - 1]
+    
+    total_revenue = current_data['revenue'].sum()
+    total_operating_income = current_data['operating_income'].sum()
+    total_headcount = current_data['headcount'].sum()
+    
+    # Calculate month-over-month changes
+    prev_revenue = prior_month_data['revenue'].sum()
+    prev_operating_income = prior_month_data['operating_income'].sum()
+    
+    revenue_change = ((total_revenue - prev_revenue) / prev_revenue) * 100
+    oi_change = ((total_operating_income - prev_operating_income) / prev_operating_income) * 100
+    
+    # Top KPIs
+    st.markdown("### Corporate Performance (Current Month)")
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        create_kpi_card("Total Revenue", total_revenue, delta=revenue_change)
+    
+    with col2:
+        create_kpi_card("Operating Income", total_operating_income, delta=oi_change)
+    
+    with col3:
+        operating_margin = (total_operating_income / total_revenue) * 100
+        create_kpi_card("Operating Margin", operating_margin, format_type='percentage')
+    
+    with col4:
+        create_kpi_card("Total Headcount", total_headcount, format_type='number')
+    
+    st.markdown("---")
+    
+    # Revenue Trend by Unit
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("### Revenue Trend by Unit (2024)")
+        revenue_by_unit = pnl.pivot_table(
+            values='revenue',
+            index='date',
+            columns='unit_name',
+            aggfunc='sum'
+        )
+        
+        fig = go.Figure()
+        for unit in revenue_by_unit.columns[:6]:  # Top 6 units
+            fig.add_trace(go.Scatter(
+                x=revenue_by_unit.index,
+                y=revenue_by_unit[unit],
+                name=unit,
+                mode='lines',
+                line=dict(width=2)
+            ))
+        
+        fig.update_layout(
+            height=400,
+            hovermode='x unified',
+            legend=dict(orientation="v", yanchor="top", y=1, xanchor="left", x=1.02),
+            margin=dict(l=0, r=150, t=30, b=0)
+        )
+        st.plotly_chart(fig, use_container_width=True)
+    
+    with col2:
+        st.markdown("### Unit Performance Matrix (Current Month)")
+        unit_performance = current_data.copy()
+        unit_performance['bubble_size'] = unit_performance['revenue'] / 1_000_000
+        
+        fig = px.scatter(
+            unit_performance,
+            x='operating_margin_pct',
+            y='revenue_variance',
+            size='bubble_size',
+            color='vertical',
+            hover_data=['unit_name', 'revenue', 'operating_income'],
+            labels={
+                'operating_margin_pct': 'Operating Margin %',
+                'revenue_variance': 'Revenue vs Budget ($)',
+                'bubble_size': 'Revenue ($M)'
+            }
+        )
+        
+        # Add quadrant lines
+        fig.add_hline(y=0, line_dash="dash", line_color="gray", opacity=0.5)
+        fig.add_vline(x=20, line_dash="dash", line_color="gray", opacity=0.5)
+        
+        fig.update_layout(
+            height=400,
+            annotations=[
+                dict(x=25, y=2000000, text="Star Performers", showarrow=False, font=dict(size=10, color="green")),
+                dict(x=25, y=-2000000, text="Under Budget", showarrow=False, font=dict(size=10, color="orange")),
+                dict(x=15, y=-2000000, text="Needs Attention", showarrow=False, font=dict(size=10, color="red")),
+            ],
+            margin=dict(l=0, r=0, t=30, b=0)
+        )
+        st.plotly_chart(fig, use_container_width=True)
+    
+    st.markdown("---")
+    
+    # Unit Performance Table
+    st.markdown("### Unit Performance Summary (Current Month)")
+    
+    summary = current_data[['unit_name', 'revenue', 'gross_margin_pct', 'operating_income', 
+                             'operating_margin_pct', 'headcount', 'revenue_variance']].copy()
+    summary['revenue'] = summary['revenue'].apply(lambda x: format_currency(x))
+    summary['operating_income'] = summary['operating_income'].apply(lambda x: format_currency(x))
+    summary['revenue_variance'] = summary['revenue_variance'].apply(lambda x: format_currency(x))
+    summary['gross_margin_pct'] = summary['gross_margin_pct'].apply(lambda x: f"{x:.1f}%")
+    summary['operating_margin_pct'] = summary['operating_margin_pct'].apply(lambda x: f"{x:.1f}%")
+    
+    summary.columns = ['Unit', 'Revenue', 'Gross Margin', 'Operating Income', 'Op Margin', 'Headcount', 'vs Budget']
+    
+    st.dataframe(summary, use_container_width=True, hide_index=True)
+    
+    # Executive Alerts
+    st.markdown("---")
+    st.markdown("### 🚨 Executive Alerts (Requires Attention)")
+    
+    for _, alert in alerts.iterrows():
+        severity_class = f"alert-{alert['severity'].lower()}"
+        impact_symbol = "💰" if alert['financial_impact'] < 0 else "📈"
+        
+        st.markdown(f"""
+            <div class='{severity_class}'>
+                <strong>{alert['severity']}: {alert['title']}</strong><br>
+                <strong>Unit:</strong> {alert['unit_name']} | 
+                <strong>Category:</strong> {alert['category']} | 
+                <strong>Impact:</strong> {impact_symbol} {format_currency(alert['financial_impact'])}<br>
+                <strong>Description:</strong> {alert['description']}<br>
+                <strong>Recommended Action:</strong> {alert['recommended_action']}<br>
+                <strong>Owner:</strong> {alert['owner']} | <strong>Status:</strong> {alert['status']}
+            </div>
+        """, unsafe_allow_html=True)
+
+def unit_performance():
+    """Unit-Level Performance Page"""
+    st.title("📈 Unit Performance Deep Dive")
+    
+    pnl, metrics, resources, alerts, units = load_data()
+    
+    # Unit selector
+    selected_unit = st.selectbox("Select Business Unit", pnl['unit_name'].unique())
+    
+    unit_data = pnl[pnl['unit_name'] == selected_unit]
+    unit_metrics = metrics[metrics['unit_name'] == selected_unit]
+    
+    # Current month metrics
+    latest_data = unit_data[unit_data['month'] == unit_data['month'].max()].iloc[0]
+    
+    st.markdown(f"### {selected_unit} - Monthly Performance")
+    
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        create_kpi_card("Revenue", latest_data['revenue'])
+    with col2:
+        create_kpi_card("Operating Income", latest_data['operating_income'])
+    with col3:
+        create_kpi_card("Operating Margin", latest_data['operating_margin_pct'], format_type='percentage')
+    with col4:
+        create_kpi_card("Headcount", latest_data['headcount'], format_type='number')
+    
+    # Financial trends
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("### Revenue & Operating Income Trend")
+        fig = make_subplots(specs=[[{"secondary_y": True}]])
+        
+        fig.add_trace(
+            go.Scatter(x=unit_data['date'], y=unit_data['revenue'], name="Revenue", line=dict(color='blue', width=3)),
+            secondary_y=False
+        )
+        
+        fig.add_trace(
+            go.Scatter(x=unit_data['date'], y=unit_data['operating_income'], name="Operating Income", line=dict(color='green', width=3)),
+            secondary_y=False
+        )
+        
+        fig.add_trace(
+            go.Scatter(x=unit_data['date'], y=unit_data['operating_margin_pct'], name="Op Margin %", line=dict(color='orange', width=2, dash='dash')),
+            secondary_y=True
+        )
+        
+        fig.update_yaxes(title_text="Revenue / Operating Income ($)", secondary_y=False)
+        fig.update_yaxes(title_text="Operating Margin (%)", secondary_y=True)
+        fig.update_layout(height=400, hovermode='x unified', margin=dict(l=0, r=0, t=30, b=0))
+        
+        st.plotly_chart(fig, use_container_width=True)
+    
+    with col2:
+        st.markdown("### Budget vs Actual Performance")
+        fig = go.Figure()
+        
+        fig.add_trace(go.Bar(
+            x=unit_data['date'],
+            y=unit_data['budget_revenue'],
+            name='Budget Revenue',
+            marker_color='lightblue',
+            opacity=0.6
+        ))
+        
+        fig.add_trace(go.Bar(
+            x=unit_data['date'],
+            y=unit_data['revenue'],
+            name='Actual Revenue',
+            marker_color='darkblue'
+        ))
+        
+        fig.update_layout(
+            height=400,
+            barmode='group',
+            hovermode='x unified',
+            margin=dict(l=0, r=0, t=30, b=0)
+        )
+        
+        st.plotly_chart(fig, use_container_width=True)
+    
+    # Cost breakdown
+    st.markdown("### Cost Structure Analysis")
+    
+    latest_costs = {
+        'Personnel': latest_data['personnel_cost'],
+        'Contractors': latest_data['contractor_cost'],
+        'Marketing': latest_data['marketing'],
+        'Other OpEx': latest_data['other_opex']
+    }
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        fig = go.Figure(data=[go.Pie(
+            labels=list(latest_costs.keys()),
+            values=list(latest_costs.values()),
+            hole=.3
+        )])
+        fig.update_layout(height=350, margin=dict(l=0, r=0, t=30, b=0))
+        st.plotly_chart(fig, use_container_width=True)
+    
+    with col2:
+        # Cost trend over time
+        cost_data = unit_data[['date', 'personnel_cost', 'contractor_cost', 'marketing', 'other_opex']].set_index('date')
+        
+        fig = go.Figure()
+        for col in cost_data.columns:
+            fig.add_trace(go.Scatter(
+                x=cost_data.index,
+                y=cost_data[col],
+                name=col.replace('_', ' ').title(),
+                mode='lines',
+                stackgroup='one'
+            ))
+        
+        fig.update_layout(height=350, hovermode='x unified', margin=dict(l=0, r=0, t=30, b=0))
+        st.plotly_chart(fig, use_container_width=True)
+    
+    # Operational metrics (if available)
+    if not unit_metrics.empty and unit_metrics['arr'].notna().any():
+        st.markdown("### Operational Metrics")
+        
+        col1, col2, col3, col4 = st.columns(4)
+        
+        latest_metrics = unit_metrics[unit_metrics['date'] == unit_metrics['date'].max()].iloc[0]
+        
+        with col1:
+            if pd.notna(latest_metrics['arr']):
+                create_kpi_card("ARR", latest_metrics['arr'])
+        with col2:
+            if pd.notna(latest_metrics['churn_rate_pct']):
+                st.markdown(f"<div class='metric-label'>Monthly Churn</div>", unsafe_allow_html=True)
+                st.markdown(f"<div class='big-metric'>{latest_metrics['churn_rate_pct']:.2f}%</div>", unsafe_allow_html=True)
+        with col3:
+            if pd.notna(latest_metrics['ltv_cac_ratio']):
+                st.markdown(f"<div class='metric-label'>LTV:CAC Ratio</div>", unsafe_allow_html=True)
+                st.markdown(f"<div class='big-metric'>{latest_metrics['ltv_cac_ratio']:.1f}x</div>", unsafe_allow_html=True)
+        with col4:
+            st.markdown(f"<div class='metric-label'>DSO (Days)</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='big-metric'>{latest_metrics['dso_days']:.0f}</div>", unsafe_allow_html=True)
+
+def resource_allocation():
+    """Resource Allocation Page"""
+    st.title("💼 Resource Allocation & Planning")
+    
+    pnl, metrics, resources, alerts, units = load_data()
+    
+    st.markdown("### Corporate Resource Overview")
+    
+    # Total resources
+    total_budget = resources['annual_budget'].sum()
+    total_headcount = resources['total_headcount'].sum()
+    total_contractors = resources['contractor_fte'].sum()
+    
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        create_kpi_card("Total Budget", total_budget)
+    with col2:
+        create_kpi_card("Total Headcount", total_headcount, format_type='number')
+    with col3:
+        create_kpi_card("Contractor FTE", total_contractors, format_type='number')
+    with col4:
+        avg_salary = resources['avg_salary'].mean()
+        create_kpi_card("Avg Salary", avg_salary)
+    
+    st.markdown("---")
+    
+    # Budget allocation by unit
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("### Budget Allocation by Unit")
+        fig = px.treemap(
+            resources,
+            path=['unit_name'],
+            values='annual_budget',
+            title='',
+            color='annual_budget',
+            color_continuous_scale='Blues'
+        )
+        fig.update_layout(height=450, margin=dict(l=0, r=0, t=30, b=0))
+        st.plotly_chart(fig, use_container_width=True)
+    
+    with col2:
+        st.markdown("### Headcount by Function")
+        function_data = resources[['engineering_headcount', 'sales_headcount', 
+                                    'marketing_headcount', 'ops_headcount']].sum()
+        
+        fig = go.Figure(data=[go.Bar(
+            x=['Engineering', 'Sales', 'Marketing', 'Operations'],
+            y=function_data.values,
+            marker_color=['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728']
+        )])
+        
+        fig.update_layout(height=450, margin=dict(l=0, r=0, t=30, b=0))
+        st.plotly_chart(fig, use_container_width=True)
+    
+    # Quarterly spending
+    st.markdown("### Quarterly Budget Utilization")
+    
+    quarterly_spend = resources[['unit_name', 'q1_spend', 'q2_spend', 'q3_spend', 'q4_projected', 'annual_budget']].copy()
+    quarterly_spend['Total Spent'] = quarterly_spend['q1_spend'] + quarterly_spend['q2_spend'] + quarterly_spend['q3_spend']
+    quarterly_spend['Utilization %'] = (quarterly_spend['Total Spent'] / quarterly_spend['annual_budget']) * 100
+    
+    fig = go.Figure()
+    
+    fig.add_trace(go.Bar(name='Q1', x=quarterly_spend['unit_name'], y=quarterly_spend['q1_spend']))
+    fig.add_trace(go.Bar(name='Q2', x=quarterly_spend['unit_name'], y=quarterly_spend['q2_spend']))
+    fig.add_trace(go.Bar(name='Q3', x=quarterly_spend['unit_name'], y=quarterly_spend['q3_spend']))
+    fig.add_trace(go.Bar(name='Q4 (Proj)', x=quarterly_spend['unit_name'], y=quarterly_spend['q4_projected'], marker_pattern_shape="/"))
+    
+    fig.update_layout(
+        barmode='group',
+        height=400,
+        xaxis_tickangle=-45,
+        margin=dict(l=0, r=0, t=30, b=100)
+    )
+    
+    st.plotly_chart(fig, use_container_width=True)
+    
+    # Resource allocation table
+    st.markdown("### Detailed Resource Allocation")
+    
+    resource_summary = resources[['unit_name', 'annual_budget', 'total_headcount', 'contractor_fte', 
+                                   'avg_salary', 'open_positions']].copy()
+    resource_summary['annual_budget'] = resource_summary['annual_budget'].apply(lambda x: format_currency(x))
+    resource_summary['avg_salary'] = resource_summary['avg_salary'].apply(lambda x: format_currency(x))
+    
+    resource_summary.columns = ['Unit', 'Annual Budget', 'Headcount', 'Contractors', 'Avg Salary', 'Open Roles']
+    
+    st.dataframe(resource_summary, use_container_width=True, hide_index=True)
+
+# Main application
+def main():
+    st.sidebar.title("Executive Dashboard")
+    st.sidebar.markdown("---")
+    
+    # Navigation
+    page = st.sidebar.radio(
+        "Navigation",
+        ["Executive Overview", "Unit Performance", "Resource Allocation"]
+    )
+    
+    st.sidebar.markdown("---")
+    st.sidebar.markdown("### About This Dashboard")
+    st.sidebar.info("""
+        **Business Context:**
+        Real-time operational dashboard providing C-suite visibility across 12 business units.
+        
+        **Key Features:**
+        - Multi-unit P&L tracking
+        - Resource allocation monitoring
+        - Executive alert system
+        - Budget vs actual analysis
+        
+        **Built by:** Alexia  
+        **Role:** CFO Portfolio Project
+    """)
+    
+    # Page routing
+    if page == "Executive Overview":
+        executive_overview()
+    elif page == "Unit Performance":
+        unit_performance()
+    elif page == "Resource Allocation":
+        resource_allocation()
+
+if __name__ == "__main__":
+    main()

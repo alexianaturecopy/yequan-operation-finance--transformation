@@ -1,0 +1,6 @@
+alert_id,unit_id,unit_name,severity,category,title,description,financial_impact,recommended_action,owner,date_raised,status
+1,4,Mobile Products,HIGH,Cost Overrun,Contractor Spend Exceeding Plan,Unit 4 contractor costs up 67% in Q3. Now 60% of personnel budget vs 15% target.,-180000,Convert 3 key contractors to FTE. Net annual savings: $180K,Unit 4 GM,2024-09-15,Open
+2,10,IoT Division,HIGH,Revenue Variance,Q3 Revenue 18% Below Budget,IoT Division missing targets. Product-market fit concerns raised.,-2300000,Strategic review: pivot vs sunset decision needed,CFO / Unit 10 GM,2024-10-05,Open
+3,6,Data Analytics,MEDIUM,Margin Pressure,Revenue Growth Strong but Margins Declining,Unit 6 growing 40% YoY but operating margin compressed 8pts to 15%.,-850000,Review pricing strategy and cloud infrastructure costs,Unit 6 GM / Product,2024-10-20,In Progress
+4,8,EMEA Sales,MEDIUM,Collections,DSO Increasing - Collections Concern,EMEA DSO up to 72 days vs 45 day target. $3.2M aging >60 days.,-3200000,Dedicated AR resource for EMEA region,Unit 8 GM / Finance,2024-11-01,Open
+5,1,SaaS Platform,LOW,Positive Variance,Q4 Revenue Tracking 12% Above Budget,SaaS Platform accelerating. Enterprise deals closing faster than forecast.,4500000,Consider raising FY25 guidance,CFO / Investor Relations,2024-11-10,In Progress
