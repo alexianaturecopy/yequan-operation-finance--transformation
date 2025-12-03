@@ -344,10 +344,10 @@ Transitioning from traditional finance into Web3/AI/cybersecurity sectors. Focus
 
 Check out my other portfolio projects demonstrating finance leadership:
 
-- **[Resource Planning Engine](../resource-planning-engine)** - Strategic resource allocation framework
-- **[Automation Transformation Framework](../automation-transformation)** - Systematic approach to process automation
-- **[Crypto Treasury Dashboard](../crypto-treasury-dashboard)** - Web3 finance operations
-- **[Financial ML Models](../financial-ml-models)** - AI/ML for finance applications
+- **[Resource Planning Engine](https://github.com/alexianaturecopy/resource-planning-engine)** - Strategic resource allocation framework
+- **[Automation Transformation Framework](https://github.com/alexianaturecopy/automation-transformation)** - Systematic approach to process automation
+- **[Crypto Treasury Dashboard](https://github.com/alexianaturecopy/crypto-treasury-dashboard)** - Web3 finance operations
+- **[Financial ML Models](https://github.com/alexianaturecopy/financial-ml-models)** - AI/ML for finance applications
 
 ---
 
