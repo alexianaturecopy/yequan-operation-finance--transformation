@@ -3,6 +3,7 @@
 **Real-Time Performance Visibility Across 12 Business Units**
 🔗 **[VIEW LIVE DASHBOARD](https://yequan-operation-finance--transformation-75xk8nhmdsu35miuid7z5.streamlit.app/)** ← Click to see it in action!
 
+![Executive Operations Dashboard Demo](screenshots/OpsDemo.gif)](https://yequan-operation-finance--transformation-75xk8nhmdsu35miuid7z5.streamlit.app/)
 ![Dashboard](https://img.shields.io/badge/Status-Production_Ready-success)
 ![Python](https://img.shields.io/badge/Python-3.9+-blue)
 ![Streamlit](https://img.shields.io/badge/Framework-Streamlit-red)
