@@ -44,7 +44,7 @@ As CFO/COO overseeing complex organizations, you face these challenges:
 
 ---
 
-## What This Demonstrates for CFO/COO Roles
+## What This Demonstrates 
 
 ### Strategic Leadership Capabilities
 
@@ -53,15 +53,6 @@ As CFO/COO overseeing complex organizations, you face these challenges:
 ✅ **Operational Excellence** - Designed scalable processes for multi-unit management  
 ✅ **Change Leadership** - Drove adoption across 12 unit leaders and executive team  
 ✅ **Technical Fluency** - Bridged finance requirements with technical implementation
-
-### This Isn't About Coding
-
-**This is about proving I can:**
-- Design the systems that generate the insights executives need
-- Lead transformation from manual reporting to automated operations
-- Make data actionable for non-technical stakeholders
-- Scale financial operations across complex organizational structures
-- Build rather than just buy enterprise tools
 
 ---
 
@@ -163,39 +154,6 @@ Expected Impact: $4.5M incremental revenue with same headcount budget
 
 ---
 
-## Setup Instructions
-
-### Prerequisites
-- Python 3.9+
-- pip package manager
-
-### Installation
-
-```bash
-# Clone repository
-git clone https://github.com/yourusername/executive-ops-dashboard.git
-cd executive-ops-dashboard
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Generate sample data (uses realistic business scenarios)
-python src/generate_sample_data.py
-
-# Launch dashboard
-streamlit run dashboard.py
-```
-
-### Accessing the Dashboard
-
-Once launched, navigate to `http://localhost:8501` in your browser.
-
-**Navigation:**
-1. **Executive Overview** - Start here for corporate-level summary
-2. **Unit Performance** - Drill into specific business units
-3. **Resource Allocation** - Review budget and headcount distribution
-
----
 
 ## Sample Data Context
 
@@ -318,11 +276,6 @@ executive-ops-dashboard/
 
 ## About This Project
 
-### Purpose
-
-This repository demonstrates **operational leadership capabilities through technology**, not just coding ability. Every feature represents a real business challenge I've solved as a finance and operation executive.
-
-### Context
 
 Built as part of GitHub portfolio for CFO/COO roles at Web3, AI, and cybersecurity companies. Showcases:
 - Strategic systems thinking
@@ -347,7 +300,7 @@ Check out my other portfolio projects demonstrating finance leadership:
 - **[Resource Planning Engine](https://github.com/alexianaturecopy/resource-planning-engine)** - Strategic resource allocation framework
 - **[Automation Transformation Framework](https://github.com/alexianaturecopy/automation-transformation-framework)** - Systematic approach to process automation
 - **[Crypto Treasury Dashboard](https://github.com/alexianaturecopy/crypto-treasury-dashboard)** - Web3 finance operations
-- **[Financial ML Models](https://github.com/alexianaturecopy/financial-ml-models)** - AI/ML for finance applications
+- **[Financial ML Models](https://github.com/alexianaturecopy/finance-ML-models)** - AI/ML for finance applications
 
 ---
 
