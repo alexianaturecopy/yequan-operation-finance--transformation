@@ -304,11 +304,6 @@ Check out my other portfolio projects demonstrating finance leadership:
 
 ---
 
-## Coding License
-
-Hummmingbot License 
-
----
 
 ## Contact & Feedback
 
